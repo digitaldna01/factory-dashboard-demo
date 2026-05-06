@@ -1,3 +1,5 @@
+import React, { useState, useCallback, memo, Fragment } from 'react'
+import { C, Chip, FabButton } from './Components'
 /* FabOS — Premium Isometric Factory Digital Twin
  * Display Panel MFG — connected plant with cleanrooms, towers, utilities,
  * equipment clusters, pipes, conveyors. Drill-down to interior floor plan.
@@ -229,7 +231,7 @@ const CONVEYORS = [
 ];
 
 /* ═══ Iso building primitive (MEMOIZED) ═══════════════════════ */
-const IsoBuilding = React.memo(function IsoBuilding({ b, id, hovered, selected, onEnter, onLeave, onClick }) {
+const IsoBuilding = memo(function IsoBuilding({ b, id, hovered, selected, onEnter, onLeave, onClick }) {
   const accent = b.color.accent;
   const stColor = STATUS[b.status]?.dot || '#BBB';
 
@@ -1266,25 +1268,25 @@ function MiniMap({ activeId, onJump }) {
 }
 
 /* ═══ Main Factory Map ════════════════════════════════════════ */
-function FactoryMap() {
-  const [mode, setMode] = React.useState('overview');
-  const [activeBuilding, setActiveBuilding] = React.useState(null);
-  const [hoveredId, setHoveredId] = React.useState(null);
-  const [selectedEq, setSelectedEq] = React.useState(null);
+export function FactoryMap() {
+  const [mode, setMode] = useState('overview');
+  const [activeBuilding, setActiveBuilding] = useState(null);
+  const [hoveredId, setHoveredId] = useState(null);
+  const [selectedEq, setSelectedEq] = useState(null);
 
-  const handleEnter = React.useCallback((id) => setHoveredId(id), []);
-  const handleLeave = React.useCallback((id) => setHoveredId(prev => prev === id ? null : prev), []);
-  const handleSelect = React.useCallback((id) => {
+  const handleEnter = useCallback((id) => setHoveredId(id), []);
+  const handleLeave = useCallback((id) => setHoveredId(prev => prev === id ? null : prev), []);
+  const handleSelect = useCallback((id) => {
     setActiveBuilding(id);
     setSelectedEq(null);
     setMode('interior');
   }, []);
-  const backToOverview = React.useCallback(() => {
+  const backToOverview = useCallback(() => {
     setMode('overview');
     setActiveBuilding(null);
     setSelectedEq(null);
   }, []);
-  const jumpBuilding = React.useCallback((id) => {
+  const jumpBuilding = useCallback((id) => {
     setActiveBuilding(id);
     setSelectedEq(null);
   }, []);
@@ -1326,7 +1328,7 @@ function FactoryMap() {
           const isHov = hoveredId === id;
           const isLast = i === FLOW_ORDER.length - 1;
           return (
-            <React.Fragment key={id}>
+            <Fragment key={id}>
               <div
                 onClick={() => handleSelect(id)}
                 onMouseEnter={() => setHoveredId(id)}
@@ -1361,7 +1363,7 @@ function FactoryMap() {
               {!isLast && (
                 <div style={{ display: 'flex', alignItems: 'center', color: C.fg4, fontSize: 12, padding: '0 2px' }}>›</div>
               )}
-            </React.Fragment>
+            </Fragment>
           );
         })}
       </div>
@@ -1378,7 +1380,7 @@ function FactoryMap() {
           </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
             {breadcrumb.map((bc, i) => (
-              <React.Fragment key={i}>
+              <Fragment key={i}>
                 {i > 0 && <span style={{ color: C.fg4, fontSize: 12 }}>›</span>}
                 <span
                   onClick={bc.onClick || undefined}
@@ -1388,7 +1390,7 @@ function FactoryMap() {
                     cursor: bc.onClick ? 'pointer' : 'default',
                   }}
                 >{bc.label}</span>
-              </React.Fragment>
+              </Fragment>
             ))}
           </div>
         </div>
@@ -1400,13 +1402,13 @@ function FactoryMap() {
             { dot: C.amber500, label: `${holdCount} hold` },
             { dot: C.red500,   label: `${alarmCount} alarm` },
           ].map((s, i) => (
-            <React.Fragment key={i}>
+            <Fragment key={i}>
               {i > 0 && <span style={{ width: 1, height: 10, background: C.border }} />}
               <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
                 <span style={{ width: 6, height: 6, borderRadius: '50%', background: s.dot }} />
                 <span style={{ fontSize: 10, color: C.fg2, fontFamily: "'DM Mono',monospace" }}>{s.label}</span>
               </div>
-            </React.Fragment>
+            </Fragment>
           ))}
         </div>
       </div>
@@ -1556,5 +1558,3 @@ function FactoryMap() {
   );
 }
 
-window.FactoryMap = FactoryMap;
-window.BUILDINGS = BUILDINGS;

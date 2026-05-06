@@ -1,6 +1,8 @@
+import { C, STATUS_MAP, Chip, FabButton } from './Components'
+import React, { useState } from 'react'
 /* FabOS — Right Schedule / Orchestration Panel (Notion-style calendar) */
 
-const CAT_COLORS = {
+export const CAT_COLORS = {
   defect: { bg: '#FEE2E2', border: '#FCA5A5', text: '#991B1B', dot: '#EF4444' },
   recipe: { bg: '#FFEDD5', border: '#FED7AA', text: '#9A3412', dot: '#F97316' },
   equipment: { bg: '#DBEAFE', border: '#93C5FD', text: '#1E40AF', dot: '#3B82F6' },
@@ -10,7 +12,7 @@ const CAT_COLORS = {
 };
 
 // Initial scheduled events (pre-populated for demo)
-const INITIAL_EVENTS = [
+export const INITIAL_EVENTS = [
 { id: 'ev-1', wfId: 'wf-03', name: 'Equipment Health Check', category: 'equipment', target: 'EQ-08 · EQ-17', day: 0, hour: 8, duration: 1.5, priority: 'high', status: 'scheduled' },
 { id: 'ev-2', wfId: 'wf-01', name: 'Defect Analysis Agent', category: 'ai', target: 'All Equipment', day: 0, hour: 10, duration: 1, priority: 'high', status: 'running' },
 { id: 'ev-3', wfId: 'wf-04', name: 'WIP Delay Prediction', category: 'wip', target: 'All Active Lots', day: 0, hour: 13, duration: 0.5, priority: 'medium', status: 'scheduled' },
@@ -126,7 +128,7 @@ function DropZone({ day, hour, onDrop, isDraggingOver, onClick }) {
 }
 
 function DayColumn({ dayLabel, dayIndex, dayDate, events, onDrop, onEventDelete, onEventSelect, selectedEvent, isToday }) {
-  const [dragOver, setDragOver] = React.useState(false);
+  const [dragOver, setDragOver] = useState(false);
 
   return (
     <div style={{ flex: 1, minWidth: 0, position: 'relative', borderRight: `1px solid ${C.border}` }}>
@@ -196,12 +198,12 @@ function DayColumn({ dayLabel, dayIndex, dayDate, events, onDrop, onEventDelete,
 
 }
 
-function SchedulePanel({ onScheduleUpdate }) {
-  const [events, setEvents] = React.useState(INITIAL_EVENTS);
-  const [viewMode, setViewMode] = React.useState('week'); // 'day' | 'week'
-  const [weekOffset, setWeekOffset] = React.useState(0);
-  const [selectedEvent, setSelectedEvent] = React.useState(null);
-  const [dropHint, setDropHint] = React.useState(null);
+export function SchedulePanel({ onScheduleUpdate }) {
+  const [events, setEvents] = useState(INITIAL_EVENTS);
+  const [viewMode, setViewMode] = useState('week'); // 'day' | 'week'
+  const [weekOffset, setWeekOffset] = useState(0);
+  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [dropHint, setDropHint] = useState(null);
 
   // Days for week view
   const today = new Date('2026-05-03');
@@ -390,5 +392,3 @@ function SchedulePanel({ onScheduleUpdate }) {
     </div>);
 
 }
-
-Object.assign(window, { SchedulePanel, INITIAL_EVENTS, CAT_COLORS });

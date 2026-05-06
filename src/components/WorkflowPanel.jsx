@@ -1,6 +1,8 @@
+import { C, STATUS_MAP, Chip, FabButton } from './Components'
+import React, { useState } from 'react'
 /* FabOS — Left Workflow / AI Agent Panel */
 
-const WORKFLOW_CATEGORIES = {
+export const WORKFLOW_CATEGORIES = {
   defect: { label: 'Defect Analysis', color: C.red500, bg: C.red50, border: C.red100, text: C.red700 },
   recipe: { label: 'Recipe', color: '#F97316', bg: '#FFF7ED', border: '#FED7AA', text: '#9A3412' },
   equipment: { label: 'Equipment', color: C.blue500, bg: C.blue50, border: C.blue100, text: C.blue700 },
@@ -9,7 +11,7 @@ const WORKFLOW_CATEGORIES = {
   ai: { label: 'AI Agent', color: C.violet500, bg: C.violet50, border: C.violet100, text: C.violet700 },
 };
 
-const INITIAL_WORKFLOWS = [
+export const INITIAL_WORKFLOWS = [
   {
     id: 'wf-01',
     name: 'Defect Analysis Agent',
@@ -133,8 +135,8 @@ function PriorityBadge({ priority }) {
 
 function WorkflowCard({ wf, onDragStart, isScheduled }) {
   const cat = WORKFLOW_CATEGORIES[wf.category] || WORKFLOW_CATEGORIES.ai;
-  const [hov, setHov] = React.useState(false);
-  const [dragging, setDragging] = React.useState(false);
+  const [hov, setHov] = useState(false);
+  const [dragging, setDragging] = useState(false);
 
   return (
     <div
@@ -213,10 +215,10 @@ function WorkflowCard({ wf, onDragStart, isScheduled }) {
   );
 }
 
-function WorkflowPanel({ scheduledIds = [], onDragStart }) {
-  const [activeTab, setActiveTab] = React.useState('workflows');
-  const [filterCat, setFilterCat] = React.useState('all');
-  const [search, setSearch] = React.useState('');
+export function WorkflowPanel({ scheduledIds = [], onDragStart }) {
+  const [activeTab, setActiveTab] = useState('workflows');
+  const [filterCat, setFilterCat] = useState('all');
+  const [search, setSearch] = useState('');
 
   const filtered = INITIAL_WORKFLOWS.filter(wf => {
     const matchCat = filterCat === 'all' || wf.category === filterCat;
@@ -358,4 +360,3 @@ function WorkflowPanel({ scheduledIds = [], onDragStart }) {
   );
 }
 
-Object.assign(window, { WorkflowPanel, INITIAL_WORKFLOWS, WORKFLOW_CATEGORIES });

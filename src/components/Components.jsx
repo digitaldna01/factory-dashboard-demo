@@ -1,15 +1,6 @@
-/* FabOS Smart Factory OS — Shared Components */
-/* Design System: FabOS · Display Panel MFG */
+import { useState } from 'react'
 
-const FONTS_CSS = `
-  @font-face { font-family:'Inter'; font-style:normal; font-weight:100 900; src:url('fonts/Inter-VariableFont.ttf') format('truetype'); }
-  @font-face { font-family:'Inter'; font-style:italic; font-weight:100 900; src:url('fonts/Inter-Italic-VariableFont.ttf') format('truetype'); }
-  @font-face { font-family:'DM Mono'; font-style:normal; font-weight:300; src:url('fonts/DMMono-Light.ttf') format('truetype'); }
-  @font-face { font-family:'DM Mono'; font-style:normal; font-weight:400; src:url('fonts/DMMono-Regular.ttf') format('truetype'); }
-  @font-face { font-family:'DM Mono'; font-style:normal; font-weight:500; src:url('fonts/DMMono-Medium.ttf') format('truetype'); }
-`;
-
-const C = {
+export const C = {
   pageBg: '#F4F2EC',
   pageBgGradient: 'linear-gradient(180deg, #F6F4EE 0%, #F0EDE6 100%)',
   cardBg: '#FCFBF7',
@@ -26,10 +17,10 @@ const C = {
   amber500: '#D97706', amber100: '#FEF3C7', amber700: '#78350F', amber50: '#FFFBEB',
   red500: '#DC2626',   red100: '#FEE2E2',   red700: '#7F1D1D',   red50: '#FEF2F2',
   blue500: '#3B82F6',  blue100: '#DBEAFE',  blue700: '#1E3A8A',  blue50: '#EFF6FF',
-  violet500: '#6366F1',violet100: '#E0E7FF',violet700: '#3730A3',violet50: '#EEF2FF',violet400:'#818CF8',
-};
+  violet500: '#6366F1', violet100: '#E0E7FF', violet700: '#3730A3', violet50: '#EEF2FF', violet400: '#818CF8',
+}
 
-const STATUS_MAP = {
+export const STATUS_MAP = {
   running:    { bg: C.green100,  text: C.green700,  dot: C.green500,  label: 'Running' },
   processing: { bg: C.blue100,   text: C.blue700,   dot: C.blue500,   label: 'Processing' },
   hold:       { bg: C.amber100,  text: C.amber700,  dot: C.amber500,  label: 'On Hold' },
@@ -39,12 +30,11 @@ const STATUS_MAP = {
   ai:         { bg: C.violet100, text: C.violet700, dot: C.violet500, label: 'AI Agent' },
   scheduled:  { bg: C.blue100,   text: C.blue700,   dot: C.blue500,   label: 'Scheduled' },
   pending:    { bg: C.amber100,  text: C.amber700,  dot: C.amber500,  label: 'Pending' },
-};
+}
 
-/* ── Chip ─────────────────────────────────────────── */
-function Chip({ status, label, size = 'sm' }) {
-  const s = STATUS_MAP[status] || STATUS_MAP.idle;
-  const lbl = label !== undefined ? label : s.label;
+export function Chip({ status, label, size = 'sm' }) {
+  const s = STATUS_MAP[status] || STATUS_MAP.idle
+  const lbl = label !== undefined ? label : s.label
   return (
     <span style={{
       display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -57,11 +47,10 @@ function Chip({ status, label, size = 'sm' }) {
       <span style={{ width: 5, height: 5, borderRadius: '50%', background: s.dot, flexShrink: 0 }} />
       {lbl}
     </span>
-  );
+  )
 }
 
-/* ── MonoId ───────────────────────────────────────── */
-function MonoId({ children, size = 13, color, dim }) {
+export function MonoId({ children, size = 13, color, dim }) {
   return (
     <span style={{
       fontFamily: "'DM Mono', monospace",
@@ -69,31 +58,28 @@ function MonoId({ children, size = 13, color, dim }) {
       color: dim ? C.fg3 : (color || C.fg1),
       fontVariantNumeric: 'tabular-nums',
     }}>{children}</span>
-  );
+  )
 }
 
-/* ── MonoTs ───────────────────────────────────────── */
-function MonoTs({ children }) {
+export function MonoTs({ children }) {
   return (
     <span style={{ fontFamily: "'DM Mono', monospace", fontSize: 11, color: C.fg3, fontVariantNumeric: 'tabular-nums' }}>
       {children}
     </span>
-  );
+  )
 }
 
-/* ── SectionLabel ─────────────────────────────────── */
-function SectionLabel({ children, style }) {
+export function SectionLabel({ children, style }) {
   return (
     <div style={{
       fontSize: 10, fontWeight: 500, textTransform: 'uppercase',
       letterSpacing: '0.1em', color: C.fg3, lineHeight: 1, ...style,
     }}>{children}</div>
-  );
+  )
 }
 
-/* ── FabCard ──────────────────────────────────────── */
-function FabCard({ children, style, radius = 12, noPad, onClick, hoverable }) {
-  const [hov, setHov] = React.useState(false);
+export function FabCard({ children, style, radius = 12, noPad, onClick, hoverable }) {
+  const [hov, setHov] = useState(false)
   return (
     <div
       onClick={onClick}
@@ -110,25 +96,24 @@ function FabCard({ children, style, radius = 12, noPad, onClick, hoverable }) {
         ...style,
       }}
     >{children}</div>
-  );
+  )
 }
 
-/* ── Button ───────────────────────────────────────── */
-function FabButton({ children, variant = 'primary', size = 'md', onClick, style }) {
+export function FabButton({ children, variant = 'primary', size = 'md', onClick, style }) {
   const sizes = {
     xs: { padding: '3px 8px', fontSize: 10 },
     sm: { padding: '4px 10px', fontSize: 11 },
     md: { padding: '6px 14px', fontSize: 13 },
-  };
+  }
   const variants = {
-    primary:   { background: C.fg1,         color: '#fff',        border: 'none' },
-    secondary: { background: 'transparent',  color: C.fg1,         border: `1px solid ${C.border}` },
-    ghost:     { background: 'transparent',  color: C.fg3,         border: 'none' },
-    ai:        { background: C.violet50,     color: C.violet700,   border: `1px solid ${C.violet100}` },
-    danger:    { background: C.red50,        color: C.red700,      border: `1px solid ${C.red100}` },
-  };
-  const v = variants[variant] || variants.primary;
-  const s = sizes[size] || sizes.md;
+    primary:   { background: C.fg1,        color: '#fff',      border: 'none' },
+    secondary: { background: 'transparent', color: C.fg1,       border: `1px solid ${C.border}` },
+    ghost:     { background: 'transparent', color: C.fg3,       border: 'none' },
+    ai:        { background: C.violet50,    color: C.violet700, border: `1px solid ${C.violet100}` },
+    danger:    { background: C.red50,       color: C.red700,    border: `1px solid ${C.red100}` },
+  }
+  const v = variants[variant] || variants.primary
+  const s = sizes[size] || sizes.md
   return (
     <button onClick={onClick} style={{
       display: 'inline-flex', alignItems: 'center', gap: 5,
@@ -139,17 +124,16 @@ function FabButton({ children, variant = 'primary', size = 'md', onClick, style 
       onMouseEnter={e => e.currentTarget.style.opacity = '0.8'}
       onMouseLeave={e => e.currentTarget.style.opacity = '1'}
     >{children}</button>
-  );
+  )
 }
 
-/* ── TopBar ───────────────────────────────────────── */
-function TopBar({ activeTab, onTabChange }) {
+export function TopBar({ activeTab, onTabChange }) {
   const tabs = [
     { id: 'factory', label: 'Factory Map' },
     { id: 'lots', label: 'Lots' },
     { id: 'defects', label: 'Defect Map' },
     { id: 'ai', label: 'AI Agents' },
-  ];
+  ]
   return (
     <div style={{
       height: 50, background: C.pageBg,
@@ -159,7 +143,6 @@ function TopBar({ activeTab, onTabChange }) {
       justifyContent: 'space-between',
       flexShrink: 0,
     }}>
-      {/* Logo */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
         <div style={{
           width: 24, height: 24, borderRadius: 6,
@@ -176,7 +159,6 @@ function TopBar({ activeTab, onTabChange }) {
         <span style={{ fontSize: 10, color: C.fg3, letterSpacing: '0.02em' }}>Display Panel MFG</span>
       </div>
 
-      {/* Pill nav */}
       <nav style={{
         display: 'flex', gap: 2, alignItems: 'center',
         background: C.subtle, padding: '3px', borderRadius: 999,
@@ -194,24 +176,18 @@ function TopBar({ activeTab, onTabChange }) {
         ))}
       </nav>
 
-      {/* Right */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
           <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.green500 }} />
           <span style={{ fontSize: 10, color: C.fg3 }}>Live</span>
         </div>
         <MonoTs>2026-05-03 14:22</MonoTs>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginLeft: 4 }}>
-          <div style={{
-            width: 26, height: 26, borderRadius: '50%',
-            background: C.fg1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: 10, fontWeight: 600, color: '#fff',
-          }}>JL</div>
-        </div>
+        <div style={{
+          width: 26, height: 26, borderRadius: '50%',
+          background: C.fg1, display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontSize: 10, fontWeight: 600, color: '#fff', marginLeft: 4,
+        }}>JL</div>
       </div>
     </div>
-  );
+  )
 }
-
-/* export */
-Object.assign(window, { FONTS_CSS, C, STATUS_MAP, Chip, MonoId, MonoTs, SectionLabel, FabCard, FabButton, TopBar });

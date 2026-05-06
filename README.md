@@ -1,12 +1,21 @@
 # FabOS — Smart Factory OS
 
-A dashboard for display panel manufacturing operations. Built as a single-page React app using Babel standalone (no build step required).
+A dashboard for display panel manufacturing operations. Built with Vite + React + Tailwind, deployed to GitHub Pages.
 
 ## Getting Started
 
-Open `index.html` directly in a browser. No server or install needed.
+```bash
+npm install
+npm run dev
+```
 
-> **Note:** The fonts load from the local `fonts/` folder, so keep `index.html` and `fonts/` in the same directory.
+Then open `http://localhost:5173/factory-dashboard-demo/`.
+
+## Deploy to GitHub Pages
+
+Push to `main`. The GitHub Actions workflow at `.github/workflows/deploy.yml` builds and deploys automatically.
+
+> **First-time setup:** In your repo settings, go to **Pages → Source** and set it to **GitHub Actions**.
 
 ## What's Inside
 
@@ -28,60 +37,25 @@ Open `index.html` directly in a browser. No server or install needed.
 ## File Structure
 
 ```
-index.html          # Self-contained app (all JSX inlined)
-Components.jsx      # Shared design tokens, colors, and base components
-FactoryMap.jsx      # Isometric factory map and building interior views
-WorkflowPanel.jsx   # Left panel — workflow cards and active agents
-SchedulePanel.jsx   # Right panel — calendar and drag-drop scheduling
-tweaks-panel.jsx    # Floating tweaks panel (layout sliders, toggles)
-fonts/              # Inter and DM Mono variable fonts
+src/
+  App.jsx                        # Root component, layout, KPI bar, alarm ticker
+  main.jsx                       # Vite entry point
+  index.css                      # Tailwind directives + font-face declarations
+  components/
+    Components.jsx               # Design tokens (C), shared components (Chip, FabButton, TopBar…)
+    FactoryMap.jsx               # Isometric factory map and building interior views
+    WorkflowPanel.jsx            # Left panel — workflow cards and active agents
+    SchedulePanel.jsx            # Right panel — calendar and drag-drop scheduling
+    TweaksPanel.jsx              # Floating tweaks panel (layout sliders, toggles)
+  assets/fonts/                  # Inter and DM Mono variable fonts
+.github/workflows/deploy.yml     # GitHub Pages deployment
+vite.config.js                   # base: '/factory-dashboard-demo/'
+tailwind.config.js               # FabOS color tokens extended into Tailwind theme
 ```
-
-> `index.html` is fully self-contained — all JSX from the component files is inlined into it. The `.jsx` files are the source of truth for editing.
-
-## Making Changes
-
-Edit the `.jsx` source files, then regenerate `index.html` by running:
-
-```bash
-python3 -c "
-import re
-
-def read(p):
-    with open(p) as f: return f.read()
-
-parts = [
-    read('Components.jsx'),
-    read('tweaks-panel.jsx'),
-    read('WorkflowPanel.jsx'),
-    read('SchedulePanel.jsx'),
-    read('FactoryMap.jsx'),
-]
-
-with open('index.html') as f:
-    html = f.read()
-
-app = re.findall(r'<script type=\"text/babel\">(.*?)</script>', html, re.DOTALL)[-1]
-parts.append(app)
-
-template = open('index.html').read()
-combined = '\n'.join(parts)
-
-# Replace all individual script tags with one combined block
-result = re.sub(
-    r'(<script type=\"text/babel\">).*?(</script>)',
-    lambda m, done=[False]: (m.group(0) if done[0] else (done.__setitem__(0, True) or f'{m.group(1)}\n{combined}\n{m.group(2)}')),
-    template, flags=re.DOTALL
-)
-print('Use the build script in the README instead — this snippet is illustrative.')
-"
-```
-
-For quick edits, you can also edit the single `<script type="text/babel">` block inside `index.html` directly.
 
 ## Tech Stack
 
-- React 18 + ReactDOM (CDN)
-- Babel Standalone (in-browser JSX compilation, no build step)
-- Pure inline styles (no CSS framework)
+- React 18 + Vite 5
+- Tailwind CSS 3 (custom FabOS color tokens configured in `tailwind.config.js`)
+- Inline styles for dynamic/computed values; Tailwind available for new components
 - Fonts: Inter (variable), DM Mono
