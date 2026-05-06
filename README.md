@@ -11,6 +11,10 @@ npm run dev
 
 Then open `http://localhost:5173/factory-dashboard-demo/`.
 
+## Live Demo
+
+https://digitaldna01.github.io/factory-dashboard-demo/
+
 ## Deploy to GitHub Pages
 
 Push to `main`. The GitHub Actions workflow at `.github/workflows/deploy.yml` builds and deploys automatically.
